@@ -145,7 +145,15 @@ mod keccakf;
     feature = "kmac",
     feature = "tuple_hash"
 ))]
-pub use keccakf::keccakf;
+
+cfg_if::cfg_if! {
+    if #[cfg(feature = "zkvm_backend")] {
+        mod succinct;
+        pub use succinct::keccakf;
+    } else {
+        pub use keccakf::keccakf;
+    }
+}
 
 #[cfg(feature = "k12")]
 mod k12;
